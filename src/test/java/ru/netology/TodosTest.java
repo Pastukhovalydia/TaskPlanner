@@ -4,6 +4,10 @@ package ru.netology;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TodosTest {
     @Test
     public void shouldAddThreeTasksOfDifferentType() {
@@ -84,6 +88,50 @@ public class TodosTest {
         Task[] expected = {};
         Task[] actual = todos.search("Task");
         Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void testSearchMultipleTasks() {
+        Todos todos = new Todos();
+        Task task1 = new SimpleTask(1, "Complete homework");
+        Task task2 = new SimpleTask(2, "Finish project");
+        Task task3 = new Meeting(3, "Team meeting", "Project A", "2022-01-01");
+        todos.add(task1);
+        todos.add(task2);
+        todos.add(task3);
+
+        Task[] result = todos.search("project");
+
+        assertEquals(1, result.length);
+        assertFalse(Arrays.asList(result).contains(task1));
+        assertTrue(Arrays.asList(result).contains(task2));
+    }
+
+    @Test
+    public void testSearchOneTask() {
+        Todos todos = new Todos();
+        Task task1 = new SimpleTask(1, "Complete homework");
+        Task task2 = new SimpleTask(2, "Finish project");
+        todos.add(task1);
+        todos.add(task2);
+
+        Task[] result = todos.search("homework");
+
+        assertEquals(1, result.length);
+        assertEquals(task1, result[0]);
+    }
+
+    @Test
+    public void testSearchNoTasks() {
+        Todos todos = new Todos();
+        Task task1 = new SimpleTask(1, "Complete homework");
+        Task task2 = new SimpleTask(2, "Finish project");
+        todos.add(task1);
+        todos.add(task2);
+
+        Task[] result = todos.search("meeting");
+
+        assertEquals(0, result.length);
     }
 
 }
